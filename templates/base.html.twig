@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Wiilogs{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+    <aside>
+        <h1>Wiilogs</h1>
+        <ul>
+            <li>Emerson <small>production</small></li>
+            <li class="active">Emerson <small>recette</small></li>
+            <li>Arkema <small>production</small></li>
+            <li>Arkema <small>recette</small></li>
+        </ul>
+    </aside>
+    <div class="content">
+            {% block content %}
+            {% endblock %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
 </html>

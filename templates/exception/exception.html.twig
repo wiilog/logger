@@ -1,0 +1,68 @@
+{% macro print_args(args) %}
+    {%- for arg in args -%}
+        {%- if arg[0] == 'object' -%}
+            <span class="argument">{{ arg[1] }}{% if not loop.last %}, {% endif %}</span>
+        {%- else -%}
+            <span class="argument">{{ arg[1] }} ({{ arg[0] }}){% if not loop.last %}, {% endif %}</span>
+        {%- endif -%}
+    {%- endfor -%}
+{% endmacro %}
+
+{% import _self as macros %}
+
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="tab-control">
+        <button data-target="#request">Request</button>
+        <button data-target="#exception" class="active">Exceptions</button>
+    </div>
+
+    <div class="url">
+        <b>{{ context.context.method }}</b>
+        <a href="{{ context.context.uri }}" target="_blank">{{ context.context.uri }}</a>
+    </div>
+    <div class="exception">
+        {{ context.exception.message }}
+
+        <span class="code">HTTP {{ context.exception.statusCode }} - {{ context.exception.statusText }}</span>
+    </div>
+
+    <div id="request" class="tab hidden">
+        <div class="colored">
+            <h1>Headers</h1>
+            {% for key, value in context.context.headers %}
+                <b>{{ key | title }} :</b> {{ value[0] is defined ? value[0] : value }}<br>
+            {% endfor %}
+        </div>
+
+        <div class="regular">
+            <h1>Body</h1>
+            not yet!
+        </div>
+    </div>
+
+    <div id="exception" class="regular tab">
+        <h1>{{ context.exception.class }}</h1>
+
+        {% for trace in context.exception.trace %}
+            <div class="trace">
+                <div class="header">
+                    <i class="toggle fas {% if loop.first %}fa-minus{% else %}fa-plus{% endif %}"></i>
+
+                    {% if trace.short_class and trace.type and trace.function %}
+                        <h1>{{ trace.short_class }}{{ trace.type }}{{ trace.function }}({{ macros.print_args(trace.args) }})</h1>
+                    {% endif %}
+
+                    <h2 title="{{ trace.file }}:{{ trace.line }}">in {{ trace.file }} (line {{ trace.line }})</h2>
+                </div>
+
+                <ol start="{{ trace.content | keys | first }}" {% if not loop.first %}class="d-none"{% endif %}>
+                    {%- for number, line in trace.content -%}
+                        <li {% if number == trace.line %}class="highlighted"{% endif %}><pre>{{- line -}}</pre></li>
+                    {%- endfor -%}
+                </ol>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

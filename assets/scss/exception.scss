@@ -1,0 +1,134 @@
+.tab-control {
+    display: flex;
+    justify-content: flex-end;
+
+
+    button {
+        background-color: #DDD;
+        border-radius: 4px;
+        padding: 4px 10px;
+        border: none;
+        margin: 5px;
+        color: #555;
+
+        &:hover {
+            background-color: lighten(#DDD, 5);
+        }
+    }
+
+    button.active {
+        background-color: $primary;
+        color: white;
+
+        &:hover {
+            background-color: lighten($primary, 5);
+        }
+    }
+}
+
+.tab.hidden {
+    display: none;
+}
+
+.url {
+    font-size: 1rem;
+    color: #B8B8B8;
+    margin-bottom: -10px;
+
+    a {
+        color: #B8B8B8;
+    }
+}
+
+.exception {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: darken($primary, 5);
+    margin-bottom: 20px;
+
+    .code {
+        float: right;
+        font-size: 1rem;
+    }
+}
+
+.colored {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 30px 0;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: $accent;
+    color: white;
+
+    h1 {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+}
+
+.regular {
+    background-color: #EEE;
+    padding: 10px;
+    border-radius: 5px;
+    color: #333;
+
+    h1 {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+}
+
+.trace {
+    .header {
+        display: grid;
+        grid-template-columns: 30px auto;
+    }
+
+    .header .toggle {
+        grid-area: 1 / 1 / 3 / 2;
+        padding-top: 10px;
+        padding-left: 5px;
+    }
+
+    h1 {
+        grid-area: 1 / 2 / 2 / 3;
+        margin-bottom: 0;
+        font-size: 1rem;
+        color: $primary;
+    }
+
+    h2 {
+        grid-area: 2 / 2 / 3 / 3;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .argument {
+        font-style: italic;
+        font-weight: normal;
+        color: #888;
+    }
+
+    ol {
+        overflow-x: auto;
+
+        li {
+            width: 100%;
+            list-style-type: decimal;
+            color: #888;
+
+            &.highlighted {
+                background-color: #DDD;
+                border-radius: 4px;
+            }
+        }
+
+        pre {
+            margin: 0 0 0 10px;
+            overflow: visible;
+        }
+    }
+}
