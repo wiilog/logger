@@ -3,20 +3,21 @@
 {% block title %}Exceptions list{% endblock %}
 
 {% block content %}
+    <h1 class="title">Exceptions on instance {{ instance }} ({{ mode }})</h1>
     <table>
         <thead>
         <tr>
             <th>ID</th>
             <th>Request</th>
-            <th>Exception</th>
             <th>Method</th>
+            <th>Exception</th>
             <th>Occurred</th>
         </tr>
         </thead>
         <tbody>
         {% for exception in exceptions %}
             <tr data-href="{{ path('exception_show', {'instance': instance, 'mode': mode, 'exception': exception.id}) }}">
-                <td>{{ exception.id }}</td>
+                <td><span class="muted">{{ exception.id }}</span></td>
                 <td>{{ exception.request.method }}</td>
                 <td>{{ exception.exception.class }}</td>
                 <td>{{ exception.method }}</td>

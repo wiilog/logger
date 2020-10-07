@@ -35,27 +35,34 @@
         <div class="colored">
             <h1>Headers</h1>
             {% for key, value in context.request.headers %}
-                <b>{{ key | title }} :</b> {{ value[0] is defined ? value[0] : value }}<br>
+                <b>{{ key | title }}:</b> {{ value[0] is defined ? value[0] : value }}<br>
             {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="regular">
+                <h1>Query parameters</h1>
+                {% for key, query in context.request.query.all %}
+                    <b>{{ key }}:</b> {{ query }}<br>
+                {% else %}
+                    No query parameters were found
+                {% endfor %}
+            </div>
+
+            <div class="regular">
+                <h1>Request parameters</h1>
+                {% for key, request in context.request.request.all %}
+                    <b>{{ key }}:</b> {{ request }}<br>
+                {% else %}
+                    No request parameters were found
+                {% endfor %}
+            </div>
         </div>
 
         <div class="regular">
-            <h1>Query and request parameters</h1>
-            {% for key, query in context.request.query.all %}
-                {{ key }} {{ query }}
-            {% endfor %}
-
-            {% for key, request in context.request.query.all %}
-                {{ key }} {{ request }}
-            {% endfor %}
+            <h1>Content</h1>
+            {{ context.request.content ?? 'No body content' }}
         </div>
-
-        {% if context.request.content %}
-            <div class="regular">
-                <h1>Content</h1>
-                {{ context.request.content }}
-            </div>
-        {% endif %}
     </div>
 
     <div id="exception" class="regular tab">

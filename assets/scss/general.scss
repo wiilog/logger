@@ -72,7 +72,7 @@ aside {
 table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 3px;
+    border-spacing: 0 6px;
 }
 
 th {
@@ -80,6 +80,10 @@ th {
     font-weight: bold;
     text-align: left;
     color: #555;
+}
+
+td {
+    font-size: 0.9rem;
 }
 
 tbody > tr {
@@ -107,10 +111,44 @@ th:last-child, td:last-child {
     border-top-right-radius: 4px;
 }
 
+h1 {
+    margin: 0;
+
+
+}
+
+.title {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 900;
+}
 h2 {
     margin: 0;
 }
 
 .hidden {
     display: none;
+}
+
+.muted {
+    color: #777;
+    font-size: 0.8rem;
+}
+
+.row {
+    display: flex;
+
+    &>* {
+        flex: 1;
+
+        &:not(:first-child) {
+            margin-left: 5px;
+        }
+
+        &:not(:last-child) {
+            margin-right: 5px;
+        }
+    }
 }
