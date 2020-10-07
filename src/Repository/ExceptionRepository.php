@@ -16,13 +16,11 @@ class ExceptionRepository extends EntityRepository {
 
     public function findInstance(string $instance, string $mode) {
         return $this->createQueryBuilder("e")
-            ->addSelect("COUNT(e.hash) AS count")
             ->where("e.instance = :instance")
             ->andWhere("e.mode = :mode")
-            ->groupBy("e.hash")
             ->setParameter("instance", $instance)
             ->setParameter("mode", $mode)
-            ->getQuery()->getResult();
+            ->getQuery();
     }
 
 }

@@ -10,8 +10,7 @@
             <th>Request</th>
             <th>Exception</th>
             <th>Method</th>
-            <th>Last occurrence</th>
-            <th>Count</th>
+            <th>Occurred</th>
         </tr>
         </thead>
         <tbody>
@@ -22,7 +21,6 @@
                 <td>{{ exception.exception.class }}</td>
                 <td>{{ exception.method }}</td>
                 <td>{{ exception.time | date('d/m/Y H:i:s') }}</td>
-                <td>{{ exception.count }}</td>
             </tr>
         {% endfor %}
         </tbody>

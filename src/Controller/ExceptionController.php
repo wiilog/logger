@@ -22,14 +22,8 @@ class ExceptionController extends AbstractController {
             ->findInstance($instance, $mode);
 
         $exceptions = $paginator->paginate($exceptions, $request->get("page", 1), 20);
-        $items = [];
 
-        /** @var Exception $exception */
-        foreach($exceptions as $item) {
-            dump($item);
-            $exception = $item[0];
-            $exception->count = $item["count"];
-
+        foreach($exceptions as $exception) {
             $trace = $exception->getException()->getTrace();
 
             if(count($trace) >= 2) {
@@ -37,11 +31,7 @@ class ExceptionController extends AbstractController {
             } else {
                 $exception->method = "/";
             }
-
-            $items[] = $exception;
         }
-
-        $exceptions->setItems($items);
 
         return $this->render("exception/list.html.twig", [
             "instance" => $instance,
