@@ -10,7 +10,10 @@
 
 {% import _self as macros %}
 
+{% set encore_script = 'exception_show' %}
 {% extends 'base.html.twig' %}
+
+{% block title %}Log: {{ context.exception.message }}{% endblock %}
 
 {% block content %}
     <div class="tab-control">
@@ -19,8 +22,8 @@
     </div>
 
     <div class="url">
-        <b>{{ context.context.method }}</b>
-        <a href="{{ context.context.uri }}" target="_blank">{{ context.context.uri }}</a>
+        <b>{{ context.request.method }}</b>
+        <a href="{{ context.request.uri }}" target="_blank">{{ context.request.uri }}</a>
     </div>
     <div class="exception">
         {{ context.exception.message }}
@@ -31,15 +34,28 @@
     <div id="request" class="tab hidden">
         <div class="colored">
             <h1>Headers</h1>
-            {% for key, value in context.context.headers %}
+            {% for key, value in context.request.headers %}
                 <b>{{ key | title }} :</b> {{ value[0] is defined ? value[0] : value }}<br>
             {% endfor %}
         </div>
 
         <div class="regular">
-            <h1>Body</h1>
-            not yet!
+            <h1>Query and request parameters</h1>
+            {% for key, query in context.request.query.all %}
+                {{ key }} {{ query }}
+            {% endfor %}
+
+            {% for key, request in context.request.query.all %}
+                {{ key }} {{ request }}
+            {% endfor %}
         </div>
+
+        {% if context.request.content %}
+            <div class="regular">
+                <h1>Content</h1>
+                {{ context.request.content }}
+            </div>
+        {% endif %}
     </div>
 
     <div id="exception" class="regular tab">
@@ -57,9 +73,11 @@
                     <h2 title="{{ trace.file }}:{{ trace.line }}">in {{ trace.file }} (line {{ trace.line }})</h2>
                 </div>
 
-                <ol start="{{ trace.content | keys | first }}" {% if not loop.first %}class="d-none"{% endif %}>
+                <ol start="{{ trace.content | keys | first }}" {% if not loop.first %}class="hidden"{% endif %}>
                     {%- for number, line in trace.content -%}
-                        <li {% if number == trace.line %}class="highlighted"{% endif %}><pre>{{- line -}}</pre></li>
+                        <li {% if number == trace.line %}class="highlighted"{% endif %}>
+                            <pre>{{- line -}}</pre>
+                        </li>
                     {%- endfor -%}
                 </ol>
             </div>

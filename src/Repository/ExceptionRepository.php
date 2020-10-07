@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Exception;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * @method Exception|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,39 +12,17 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Exception[]    findAll()
  * @method Exception[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ExceptionRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Exception::class);
+class ExceptionRepository extends EntityRepository {
+
+    public function findInstance(string $instance, string $mode) {
+        return $this->createQueryBuilder("e")
+            ->addSelect("COUNT(e.hash) AS count")
+            ->where("e.instance = :instance")
+            ->andWhere("e.mode = :mode")
+            ->groupBy("e.hash")
+            ->setParameter("instance", $instance)
+            ->setParameter("mode", $mode)
+            ->getQuery()->getResult();
     }
 
-    // /**
-    //  * @return Exception[] Returns an array of Exception objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Exception
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

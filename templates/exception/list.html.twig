@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exceptions list{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Request</th>
+            <th>Exception</th>
+            <th>Method</th>
+            <th>Last occurrence</th>
+            <th>Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for exception in exceptions %}
+            <tr data-href="{{ path('exception_show', {'instance': instance, 'mode': mode, 'exception': exception.id}) }}">
+                <td>{{ exception.id }}</td>
+                <td>{{ exception.request.method }}</td>
+                <td>{{ exception.exception.class }}</td>
+                <td>{{ exception.method }}</td>
+                <td>{{ exception.time | date('d/m/Y H:i:s') }}</td>
+                <td>{{ exception.count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

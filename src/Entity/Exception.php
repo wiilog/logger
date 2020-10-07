@@ -21,19 +21,41 @@ class Exception {
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
+     */
+    private string $hash;
+
+    /**
+     * @ORM\Column(type="string")
      */
     private string $instance;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private string $mode;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private ?array $context;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private ?array $user;
+
+    /**
      * @ORM\Column(type="text")
      */
-    private string $context;
+    private string $request;
+    private ?Request $unserializedRequest = null;
 
     /**
      * @ORM\Column(type="text")
      */
     private string $exception;
+    private ?FlattenException $unserializedException = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,31 +66,71 @@ class Exception {
         return $this->id;
     }
 
-    public function getInstance(): ?string {
+    public function getHash(): string {
+        return $this->hash;
+    }
+
+    public function setHash(string $hash): void {
+        $this->hash = $hash;
+    }
+
+    public function getInstance(): string {
         return $this->instance;
     }
 
-    public function setInstance(string $instance): self {
+    public function setInstance(string $instance): void {
         $this->instance = $instance;
-
-        return $this;
     }
 
-    public function getContext(): ?Request {
-        return $this->context ? unserialize($this->context) : null;
+    public function getMode(): string {
+        return $this->mode;
     }
 
-    public function getTextContext(): ?string {
+    public function setMode(string $mode): void {
+        $this->mode = $mode;
+    }
+
+    public function getContext(): ?array {
         return $this->context;
     }
 
-    public function setContext(string $context): self {
+    public function setContext(?array $context): void {
         $this->context = $context;
+    }
+
+    public function getUser(): ?array {
+        return $this->user;
+    }
+
+    public function setUser(?array $user): void {
+        $this->user = $user;
+    }
+
+    public function getRequest(): ?Request {
+        if(!$this->unserializedRequest) {
+            $this->unserializedRequest = unserialize($this->request);
+        }
+
+        return $this->unserializedRequest;
+    }
+
+    public function getTextRequest(): ?string {
+        return $this->request;
+    }
+
+    public function setRequest(string $request): self {
+        $this->request = $request;
+        $this->unserializedRequest = null;
+
         return $this;
     }
 
     public function getException(): ?FlattenException {
-        return $this->exception ? unserialize($this->exception) : null;
+        if(!$this->unserializedException) {
+            $this->unserializedException = unserialize($this->exception);
+        }
+
+        return $this->unserializedException;
     }
 
     public function getTextException(): ?string {
@@ -77,6 +139,7 @@ class Exception {
 
     public function setException(string $exception): self {
         $this->exception = $exception;
+        $this->unserializedException = null;
 
         return $this;
     }

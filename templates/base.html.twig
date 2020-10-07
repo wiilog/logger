@@ -19,12 +19,16 @@
         </ul>
     </aside>
     <div class="content">
-            {% block content %}
-            {% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
 {% endblock %}
 {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
+    {% if encore_script is defined %}
+        {{ encore_entry_script_tags(encore_script) }}
+    {% else %}
+        {{ encore_entry_script_tags('app') }}
+    {% endif %}
 {% endblock %}
 </body>
 </html>
