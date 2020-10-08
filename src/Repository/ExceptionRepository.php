@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Exception;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -14,12 +13,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class ExceptionRepository extends EntityRepository {
 
-    public function findInstance(string $instance, string $mode) {
+    public function findInstance($instance) {
         return $this->createQueryBuilder("e")
             ->where("e.instance = :instance")
-            ->andWhere("e.mode = :mode")
             ->setParameter("instance", $instance)
-            ->setParameter("mode", $mode)
             ->getQuery();
     }
 

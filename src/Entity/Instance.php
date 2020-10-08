@@ -18,58 +18,19 @@ class Instance {
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private string $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private string $mode;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      */
-    private string $environment;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $locale;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $client;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $dashboardToken;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $url;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $forbiddenPhones;
-
-    public static function from(array $data): ?Instance {
-        $instance = new Instance();
-        $instance->setName($data["name"]);
-        $instance->setMode($data["mode"]);
-        $instance->setEnvironment($data["env"]);
-        $instance->setLocale($data["locale"]);
-        $instance->setClient($data["client"]);
-        $instance->setDashboardToken($data["dashboard_token"]);
-        $instance->setUrl($data["url"]);
-        $instance->setForbiddenPhones($data["forbidden_phones"]);
-
-        return $instance;
-    }
+    private string $code;
 
     public function getId(): ?int {
         return $this->id;
@@ -95,62 +56,12 @@ class Instance {
         return $this;
     }
 
-    public function getEnvironment(): ?string {
-        return $this->environment;
+    public function getCode(): ?string {
+        return $this->code;
     }
 
-    public function setEnvironment(string $environment): self {
-        $this->environment = $environment;
-
-        return $this;
-    }
-
-    public function getLocale(): ?string {
-        return $this->locale;
-    }
-
-    public function setLocale(string $locale): self {
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    public function getClient(): ?string {
-        return $this->client;
-    }
-
-    public function setClient(string $client): self {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    public function getDashboardToken(): ?string {
-        return $this->dashboardToken;
-    }
-
-    public function setDashboardToken(string $dashboardToken): self {
-        $this->dashboardToken = $dashboardToken;
-
-        return $this;
-    }
-
-    public function getUrl(): ?string {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): self {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    public function getForbiddenPhones(): ?string {
-        return $this->forbiddenPhones;
-    }
-
-    public function setForbiddenPhones(string $forbiddenPhones): self {
-        $this->forbiddenPhones = $forbiddenPhones;
+    public function setCode(string $code): self {
+        $this->code = $code;
 
         return $this;
     }

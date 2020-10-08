@@ -1,0 +1,24 @@
+{% macro print_args(args) %}
+    {%- for arg in args -%}
+        {%- if arg[0] == 'object' -%}
+            <span class="argument">{{ arg[1] | split('\\') | last }}{% if not loop.last %}, {% endif %}</span>
+        {%- else -%}
+            <span class="argument">{{ arg[1] }}{% if not loop.last %}, {% endif %}</span>
+        {%- endif -%}
+    {%- endfor -%}
+{% endmacro %}
+
+{% import _self as macros %}
+
+{% apply spaceless %}
+    {% if trace.short_class and trace.type and trace.function %}
+        <span class="called">
+            {{- trace.short_class -}}
+
+            <span class="type">{{- trace.type -}}</span>
+            <span class="method">
+                {{- trace.function -}}({{ macros.print_args(trace.args) }})
+            </span>
+        </span>
+    {% endif %}
+{% endapply %}

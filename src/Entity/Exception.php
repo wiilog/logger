@@ -21,19 +21,9 @@ class Exception {
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Instance", cascade={"persist"})
      */
-    private string $hash;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $instance;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $mode;
+    private Instance $instance;
 
     /**
      * @ORM\Column(type="array")
@@ -54,8 +44,8 @@ class Exception {
     /**
      * @ORM\Column(type="text")
      */
-    private string $exception;
-    private ?FlattenException $unserializedException = null;
+    private string $exceptions;
+    private ?array $unserializedExceptions = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -66,28 +56,12 @@ class Exception {
         return $this->id;
     }
 
-    public function getHash(): string {
-        return $this->hash;
-    }
-
-    public function setHash(string $hash): void {
-        $this->hash = $hash;
-    }
-
-    public function getInstance(): string {
+    public function getInstance(): ?Instance {
         return $this->instance;
     }
 
-    public function setInstance(string $instance): void {
+    public function setInstance(Instance $instance): void {
         $this->instance = $instance;
-    }
-
-    public function getMode(): string {
-        return $this->mode;
-    }
-
-    public function setMode(string $mode): void {
-        $this->mode = $mode;
     }
 
     public function getContext(): ?array {
@@ -125,21 +99,29 @@ class Exception {
         return $this;
     }
 
-    public function getException(): ?FlattenException {
-        if(!$this->unserializedException) {
-            $this->unserializedException = unserialize($this->exception);
+    public function getExceptions(): ?array {
+        if(!$this->unserializedExceptions) {
+            $this->unserializedExceptions = unserialize($this->exceptions);
         }
 
-        return $this->unserializedException;
+        return $this->unserializedExceptions;
     }
 
-    public function getTextException(): ?string {
-        return $this->exception;
+    public function getFirstException(): ?FlattenException {
+        if(!$this->unserializedExceptions) {
+            $this->unserializedExceptions = unserialize($this->exceptions);
+        }
+
+        return $this->unserializedExceptions[0];
     }
 
-    public function setException(string $exception): self {
-        $this->exception = $exception;
-        $this->unserializedException = null;
+    public function getTextExceptions(): ?string {
+        return $this->exceptions;
+    }
+
+    public function setExceptions(string $exceptions): self {
+        $this->exceptions = $exceptions;
+        $this->unserializedExceptions = null;
 
         return $this;
     }

@@ -12,10 +12,23 @@
     <aside>
         <h1>Wiilogs</h1>
         <ul>
-            <li>Emerson <small>production</small></li>
-            <li class="active">Emerson <small>recette</small></li>
-            <li>Arkema <small>production</small></li>
-            <li>Arkema <small>recette</small></li>
+            {% for instance in __instance_menu %}
+                <li {% if current_instance is defined and current_instance.code == instance.code %}class="active"{% endif %}>
+                    <a href="{{ path('exception_list', {'instance': instance.code}) }}">
+                        {{ instance.name }}
+
+                        <small>
+                            {% if instance.mode == "rec" %}
+                                recette
+                            {% elseif instance.mode == "prod" %}
+                                production
+                            {% else %}
+                                {{ instance.mode }}
+                            {% endif %}
+                        </small>
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     </aside>
     <div class="content">

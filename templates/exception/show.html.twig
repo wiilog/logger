@@ -1,34 +1,20 @@
-{% macro print_args(args) %}
-    {%- for arg in args -%}
-        {%- if arg[0] == 'object' -%}
-            <span class="argument">{{ arg[1] }}{% if not loop.last %}, {% endif %}</span>
-        {%- else -%}
-            <span class="argument">{{ arg[1] }} ({{ arg[0] }}){% if not loop.last %}, {% endif %}</span>
-        {%- endif -%}
-    {%- endfor -%}
-{% endmacro %}
-
-{% import _self as macros %}
-
 {% set encore_script = 'exception_show' %}
 {% extends 'base.html.twig' %}
 
-{% block title %}Log: {{ context.exception.message }}{% endblock %}
+{% block title %}Log: {{ context.firstException.message }}{% endblock %}
 
 {% block content %}
     <div class="tab-control">
         <button data-target="#request">Request</button>
-        <button data-target="#exception" class="active">Exceptions</button>
+        <button data-target=".exception" class="active">Exceptions</button>
     </div>
 
     <div class="url">
         <b>{{ context.request.method }}</b>
         <a href="{{ context.request.uri }}" target="_blank">{{ context.request.uri }}</a>
     </div>
-    <div class="exception">
-        {{ context.exception.message }}
-
-        <span class="code">HTTP {{ context.exception.statusCode }} - {{ context.exception.statusText }}</span>
+    <div class="exception-message">
+        {{ context.firstException.message }}
     </div>
 
     <div id="request" class="tab hidden">
@@ -61,33 +47,38 @@
 
         <div class="regular">
             <h1>Content</h1>
-            {{ context.request.content ?? 'No body content' }}
+            {{ context.request.content ?: 'No body content' }}
         </div>
     </div>
 
-    <div id="exception" class="regular tab">
-        <h1>{{ context.exception.class }}</h1>
+    {% for exception in context.exceptions %}
+        <div class="exception regular tab">
+            <h1>{{ exception.class }}</h1>
+            {% if not loop.first %}
+                <span class="message">{{ exception.message }}</span>
+            {% endif %}
 
-        {% for trace in context.exception.trace %}
-            <div class="trace">
-                <div class="header">
-                    <i class="toggle fas {% if loop.first %}fa-minus{% else %}fa-plus{% endif %}"></i>
+            {% for trace in exception.trace %}
+                {% set displayed = loop.first and loop.parent.loop.first %}
 
-                    {% if trace.short_class and trace.type and trace.function %}
-                        <h1>{{ trace.short_class }}{{ trace.type }}{{ trace.function }}({{ macros.print_args(trace.args) }})</h1>
-                    {% endif %}
+                <div class="trace">
+                    <div class="header">
+                        <i class="toggle fas {% if displayed %}fa-minus{% else %}fa-plus{% endif %}"></i>
 
-                    <h2 title="{{ trace.file }}:{{ trace.line }}">in {{ trace.file }} (line {{ trace.line }})</h2>
+                        {% include 'display_method.html.twig' with {trace: trace} %}
+
+                        <h2 title="{{ trace.file }}:{{ trace.line }}">in {{ trace.file }} (line {{ trace.line }})</h2>
+                    </div>
+
+                    <ol start="{{ trace.content | keys | first }}" {% if not displayed %}class="hidden"{% endif %}>
+                        {%- for number, line in trace.content -%}
+                            <li {% if number == trace.line %}class="highlighted"{% endif %}>
+                                <pre>{{- line -}}</pre>
+                            </li>
+                        {%- endfor -%}
+                    </ol>
                 </div>
-
-                <ol start="{{ trace.content | keys | first }}" {% if not loop.first %}class="hidden"{% endif %}>
-                    {%- for number, line in trace.content -%}
-                        <li {% if number == trace.line %}class="highlighted"{% endif %}>
-                            <pre>{{- line -}}</pre>
-                        </li>
-                    {%- endfor -%}
-                </ol>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}

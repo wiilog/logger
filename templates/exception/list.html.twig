@@ -3,7 +3,8 @@
 {% block title %}Exceptions list{% endblock %}
 
 {% block content %}
-    <h1 class="title">Exceptions on instance {{ instance }} ({{ mode }})</h1>
+    <h1 class="title">Exceptions on instance <span class="bolder">{{ current_instance.code | upper }}</span></h1>
+
     <table>
         <thead>
         <tr>
@@ -16,11 +17,11 @@
         </thead>
         <tbody>
         {% for exception in exceptions %}
-            <tr data-href="{{ path('exception_show', {'instance': instance, 'mode': mode, 'exception': exception.id}) }}">
+            <tr data-href="{{ path('exception_show', {'instance': current_instance.code, 'exception': exception.id}) }}">
                 <td><span class="muted">{{ exception.id }}</span></td>
-                <td>{{ exception.request.method }}</td>
-                <td>{{ exception.exception.class }}</td>
-                <td>{{ exception.method }}</td>
+                <td><small><strong>{{ exception.request.method }}</strong> <u>{{ exception.request.requestUri | split('?')[0] | trim('/', 'right') }}</u></small></td>
+                <td>{% include 'display_method.html.twig' with {trace: exception.method} %}</td>
+                <td><strong>{{ exception.firstException.class | split('\\') | last }}</strong></td>
                 <td>{{ exception.time | date('d/m/Y H:i:s') }}</td>
             </tr>
         {% endfor %}
