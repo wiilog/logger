@@ -14,16 +14,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExceptionController extends BaseController {
 
     /**
-     * @Route("/{instance}", name="exception_list")
+     * @Route("/{instance?}", name="exception_list")
      */
-    public function list(Request $request, PaginatorInterface $paginator, string $instance) {
-        $instance = $this->getDoctrine()
-            ->getRepository(Instance::class)
-            ->findOneBy(["code" => $instance]);
+    public function list(Request $request, PaginatorInterface $paginator, ?string $instance) {
+        $er = $this->getDoctrine()->getRepository(Exception::class);
 
-        $exceptions = $this->getDoctrine()
-            ->getRepository(Exception::class)
-            ->findInstance($instance);
+        if($instance) {
+            $instance = $this->getDoctrine()
+                ->getRepository(Instance::class)
+                ->findOneBy(["code" => $instance]);
+
+            $exceptions = $er->findInstance($instance);
+        } else {
+            $exceptions = $er->findAll();
+        }
 
         $exceptions = $paginator->paginate($exceptions, $request->get("page", 1), 20);
 
@@ -38,7 +42,7 @@ class ExceptionController extends BaseController {
         }
 
         return $this->render("exception/list.html.twig", [
-            "current_instance" => $instance,
+            "current_instance" => $instance ?? null,
             "exceptions" => $exceptions,
         ]);
     }
