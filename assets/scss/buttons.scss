@@ -1,0 +1,28 @@
+@mixin button {
+    display: inline-block;
+    box-sizing: border-box;
+    height: 30px;
+    background-color: #DDD;
+    border-radius: 4px;
+    padding: 4px 15px;
+    border: none;
+    color: #555;
+
+    &:hover {
+        background-color: lighten(#DDD, 5);
+    }
+
+    &.active {
+        background-color: $primary;
+        color: white;
+
+        &:hover {
+            background-color: lighten($primary, 5);
+        }
+    }
+}
+
+button {
+    @include button;
+    margin: 2px;
+}

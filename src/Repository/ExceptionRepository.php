@@ -13,9 +13,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class ExceptionRepository extends EntityRepository {
 
-    public function findInstance($instance) {
+    public function queryOrdered() {
+        return $this->createQueryBuilder("e")
+            ->orderBy("e.time", "DESC")
+            ->getQuery();
+    }
+
+    public function queryInstance($instance) {
         return $this->createQueryBuilder("e")
             ->where("e.instance = :instance")
+            ->orderBy("e.time", "DESC")
             ->setParameter("instance", $instance)
             ->getQuery();
     }

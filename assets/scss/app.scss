@@ -3,6 +3,17 @@
 @import '~@fortawesome/fontawesome-free/scss/regular';
 @import '~@fortawesome/fontawesome-free/scss/brands';
 
+$background: #fafafa;
+$wiilog: #00599b;
+
+$primary: #0069be;
+$light-blue: #1684dd;
+$accent: #55a9e5;
+$lighter-blue: #e8f3ff;
+$grey: #f5f5f5;
+
+@import "fonts";
+@import "buttons";
 @import "general";
 @import "exception_show";
-@import "fonts";
+@import "pagination";

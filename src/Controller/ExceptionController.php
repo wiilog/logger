@@ -24,12 +24,12 @@ class ExceptionController extends BaseController {
                 ->getRepository(Instance::class)
                 ->findOneBy(["code" => $instance]);
 
-            $exceptions = $er->findInstance($instance);
+            $exceptions = $er->queryInstance($instance);
         } else {
-            $exceptions = $er->findAll();
+            $exceptions = $er->queryOrdered();
         }
 
-        $exceptions = $paginator->paginate($exceptions, $request->get("page", 1), 20);
+        $exceptions = $paginator->paginate($exceptions, $request->get("page", 1), 15);
 
         foreach($exceptions as $exception) {
             $trace = $exception->getFirstException()->getTrace();

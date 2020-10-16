@@ -34,4 +34,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(exceptions) | replace({'&lt;&lt;': 'First', '&gt;&gt;': 'Last', '&lt;': 'Previous', '&gt;': 'Next'}) | raw }}
+    </div>
 {% endblock %}

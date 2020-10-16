@@ -1,30 +1,6 @@
 .tab-control {
     display: flex;
     justify-content: flex-end;
-
-
-    button {
-        height: 30px;
-        background-color: #DDD;
-        border-radius: 4px;
-        padding: 4px 10px;
-        border: none;
-        margin: 5px;
-        color: #555;
-
-        &:hover {
-            background-color: lighten(#DDD, 5);
-        }
-    }
-
-    button.active {
-        background-color: $primary;
-        color: white;
-
-        &:hover {
-            background-color: lighten($primary, 5);
-        }
-    }
 }
 
 .tab.hidden {

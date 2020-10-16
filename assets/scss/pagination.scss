@@ -1,0 +1,20 @@
+.pagination {
+    display: flex;
+    margin-top: 10px;
+
+    span {
+        @include button;
+
+        margin-left: 2px;
+        margin-right: 2px;
+
+        a {
+            color: #555;
+            text-decoration: none;
+        }
+    }
+
+    span.current {
+        @extend button.active;
+    }
+}
