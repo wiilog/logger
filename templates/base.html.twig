@@ -10,11 +10,11 @@
 <body>
 {% block body %}
     <aside>
-        <h1>Wiilogs</h1>
+        <h1><a href="{{ path('exception_list') }}">Wiilogs</a></h1>
         <ul>
             {% for instance in __instance_menu %}
-                <li {% if current_instance is defined and current_instance is not null and current_instance.code == instance.code %}class="active"{% endif %}>
-                    <a href="{{ path('exception_list', {'instance': instance.code}) }}">
+                <a href="{{ path('exception_list', {'instance': instance.code}) }}">
+                    <li {% if current_instance is defined and current_instance is not null and current_instance.code == instance.code %}class="active"{% endif %}>
                         {{ instance.name }}
 
                         <small>
@@ -26,8 +26,8 @@
                                 {{ instance.mode }}
                             {% endif %}
                         </small>
-                    </a>
-                </li>
+                    </li>
+                </a>
             {% endfor %}
         </ul>
     </aside>

@@ -20,6 +20,11 @@ aside {
         font-weight: bolder;
     }
 
+    a {
+        color: $wiilog;
+        text-decoration: none;
+    }
+
     ul {
         list-style-type: none;
         font-weight: bold;
@@ -29,11 +34,6 @@ aside {
             padding: 10px 20px;
             border-radius: 5px;
             color: #444;
-
-            a {
-                color: #444;
-                text-decoration: none;
-            }
 
             &:hover {
                 border-color: $primary;
