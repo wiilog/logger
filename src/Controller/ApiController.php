@@ -36,6 +36,13 @@ class ApiController extends BaseController {
             $cache->delete("wiilogs.instances");
         }
 
+        if(!$this->isJson($request->request->get("request")) || !$this->isJson($request->request->get("exceptions"))) {
+            return $this->json([
+                "success" => false,
+                "message" => "Payload is not valid JSON"
+            ]);
+        }
+
         $exception = new Exception();
         $exception->setInstance($instance);
         $exception->setContext($request->request->get("context"));
@@ -51,6 +58,11 @@ class ApiController extends BaseController {
             "success" => true,
             "message" => "Successfully logged exception"
         ]);
+    }
+
+    private function isJson(?string $string) {
+        json_decode($string);
+        return json_last_error() == JSON_ERROR_NONE;
     }
 
 }

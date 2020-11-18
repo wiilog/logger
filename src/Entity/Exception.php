@@ -5,13 +5,21 @@ namespace App\Entity;
 use App\Repository\ExceptionRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use stdClass;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=ExceptionRepository::class)
  */
 class Exception {
+
+    private const REQUEST = "Symfony\Component\HttpFoundation\Request";
+    private const FLATTEN_EXCEPTIONS = "Symfony\Component\ErrorHandler\Exception\FlattenException[]";
 
     /**
      * @ORM\Id
@@ -39,7 +47,7 @@ class Exception {
      * @ORM\Column(type="text")
      */
     private string $request;
-    private ?Request $unserializedRequest = null;
+    private ?array $unserializedRequest = null;
 
     /**
      * @ORM\Column(type="text")
@@ -80,9 +88,9 @@ class Exception {
         $this->user = $user;
     }
 
-    public function getRequest(): ?Request {
+    public function getRequest(): ?array {
         if(!$this->unserializedRequest) {
-            $this->unserializedRequest = unserialize($this->request);
+            $this->unserializedRequest = json_decode($this->request, true);
         }
 
         return $this->unserializedRequest;
@@ -101,15 +109,15 @@ class Exception {
 
     public function getExceptions(): ?array {
         if(!$this->unserializedExceptions) {
-            $this->unserializedExceptions = unserialize($this->exceptions);
+            $this->unserializedExceptions = json_decode($this->exceptions, true);
         }
 
         return $this->unserializedExceptions;
     }
 
-    public function getFirstException(): ?FlattenException {
+    public function getFirstException(): ?array {
         if(!$this->unserializedExceptions) {
-            $this->unserializedExceptions = unserialize($this->exceptions);
+            $this->unserializedExceptions = json_decode($this->exceptions, true);
         }
 
         return $this->unserializedExceptions[0];

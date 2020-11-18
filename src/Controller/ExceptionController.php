@@ -32,7 +32,7 @@ class ExceptionController extends BaseController {
         $exceptions = $paginator->paginate($exceptions, $request->get("page", 1), 15);
 
         foreach($exceptions as $exception) {
-            $trace = $exception->getFirstException()->getTrace();
+            $trace = $exception->getFirstException()["trace"];
 
             if(count($trace) >= 2) {
                 $exception->method = $trace[1];

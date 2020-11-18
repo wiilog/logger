@@ -28,7 +28,7 @@
         <div class="row">
             <div class="regular">
                 <h1>Query parameters</h1>
-                {% for key, query in context.request.query.all %}
+                {% for key, query in context.request.query %}
                     <b>{{ key }}:</b> {{ query }}<br>
                 {% else %}
                     No query parameters were found
@@ -37,7 +37,7 @@
 
             <div class="regular">
                 <h1>Request parameters</h1>
-                {% for key, request in context.request.request.all %}
+                {% for key, request in context.request.request %}
                     <b>{{ key }}:</b> {{ request }}<br>
                 {% else %}
                     No request parameters were found
