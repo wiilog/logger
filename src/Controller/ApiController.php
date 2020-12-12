@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -22,6 +23,11 @@ class ApiController extends BaseController {
      * @Route("/log", name="api_log", methods={"POST"})
      */
     public function log(Request $request) {
+        // Ignore requests from outside the cluster
+        if(!preg_match("/10.[0-9]{1,3}\.[0-9]{1,3}.[0-9]{1,3}/", $request->getClientIp())) {
+            throw new NotFoundHttpException();
+        }
+
         $code = $request->request->get("instance");
         $instance = $this->getDoctrine()->getRepository(Instance::class)->findOneBy(["code" => $code]);
         if(!$instance) {
