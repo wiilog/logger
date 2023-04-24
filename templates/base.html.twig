@@ -10,7 +10,18 @@
 <body>
 {% block body %}
     <aside>
-        <h1><a href="{{ path('exception_list') }}">Wiilogs</a></h1>
+        <h1><a href="{{ path('exception_list_index') }}">Wiilogs</a></h1>
+        <a href="{{ path('app_logout') }}">
+            <button>Logout</button>
+        </a>
+        <form action="{{ path('add_right') }}" method="POST">
+            <label>
+                <div>Add right :</div>
+                <input type="text" name="email" placeholder="email" value="{{ search is defined ? search : '' }}">
+            </label>
+            <button type="submit">Add</button>
+        </form>
+
         <ul>
             {% for instance in __instance_menu %}
                 <a href="{{ path('exception_list', {'instance': instance.code}) }}">

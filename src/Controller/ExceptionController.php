@@ -14,7 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExceptionController extends BaseController {
 
     /**
-     * @Route("/{instance?}", name="exception_list")
+     * @Route("/instance/{instance?}", name="exception_list")
+     * @Route("/", name="exception_list_index")
      */
     public function list(Request $request, PaginatorInterface $paginator, ?string $instance) {
         $er = $this->getDoctrine()->getRepository(Exception::class);
