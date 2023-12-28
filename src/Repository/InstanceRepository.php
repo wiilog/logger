@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Instance;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * @method Instance|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,10 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Instance[]    findAll()
  * @method Instance[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InstanceRepository extends ServiceEntityRepository {
+class InstanceRepository extends EntityRepository {
 
-    public function __construct(ManagerRegistry $registry) {
-        parent::__construct($registry, Instance::class);
-    }
 
 }

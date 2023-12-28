@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Exception;
+use App\Entity\Instance;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * @method Exception|null find($id, $lockMode = null, $lockVersion = null)
@@ -13,15 +15,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class ExceptionRepository extends EntityRepository {
 
-    public function queryOrdered() {
+    public function queryOrdered(): Query {
         return $this->createQueryBuilder("e")
             ->orderBy("e.time", "DESC")
             ->getQuery();
     }
 
-    public function queryInstance($instance) {
+    public function queryInstance(Instance $instance): Query {
         return $this->createQueryBuilder("e")
-            ->where("e.instance = :instance")
+            ->andWhere("e.instance = :instance")
             ->orderBy("e.time", "DESC")
             ->setParameter("instance", $instance)
             ->getQuery();
