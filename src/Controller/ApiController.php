@@ -24,9 +24,9 @@ class ApiController extends BaseController {
      */
     public function log(Request $request) {
         // Ignore requests from outside the cluster
-//        if(!preg_match("/10.[0-9]{1,3}\.[0-9]{1,3}.[0-9]{1,3}/", $request->getClientIp())) {
-//            throw new NotFoundHttpException();
-//        }
+        if(!preg_match("/10.[0-9]{1,3}\.[0-9]{1,3}.[0-9]{1,3}/", $request->getClientIp())) {
+            throw new NotFoundHttpException();
+        }
 
         $code = $request->request->get("instance");
         $instance = $this->getDoctrine()->getRepository(Instance::class)->findOneBy(["code" => $code]);
