@@ -6,30 +6,28 @@ use App\Entity\Exception;
 use App\Entity\Instance;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api")
- */
-class ApiController extends BaseController {
+#[Route("/api")]
+class ApiController extends AbstractController {
 
-    /** @Required */
-    public EntityManagerInterface $manager;
-
-    /**
-     * @Route("/log", name="api_log", methods={"POST"})
-     */
-    public function log(Request $request) {
+    #[Route("/log", name: "api_log", methods: ["POST"])]
+    public function log(EntityManagerInterface $entityManager,
+                        Request                $request): JsonResponse {
         // Ignore requests from outside the cluster
         if(!preg_match("/10.[0-9]{1,3}\.[0-9]{1,3}.[0-9]{1,3}/", $request->getClientIp())) {
             throw new NotFoundHttpException();
         }
 
         $code = $request->request->get("instance");
-        $instance = $this->getDoctrine()->getRepository(Instance::class)->findOneBy(["code" => $code]);
+
+        $instanceRepository = $entityManager->getRepository(Instance::class);
+        $instance = $instanceRepository->findOneBy(["code" => $code]);
         if(!$instance) {
             $split = explode("-", $code);
 
@@ -57,8 +55,8 @@ class ApiController extends BaseController {
         $exception->setExceptions($request->request->get("exceptions"));
         $exception->setTime(DateTime::createFromFormat("d-m-Y H:i:s", $request->request->get("time")));
 
-        $this->manager->persist($exception);
-        $this->manager->flush();
+        $entityManager->persist($exception);
+        $entityManager->flush();
 
         return $this->json([
             "success" => true,
@@ -66,7 +64,7 @@ class ApiController extends BaseController {
         ]);
     }
 
-    private function isJson(?string $string) {
+    private function isJson(?string $string): bool {
         json_decode($string);
         return json_last_error() == JSON_ERROR_NONE;
     }

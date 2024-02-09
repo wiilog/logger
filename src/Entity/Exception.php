@@ -3,62 +3,42 @@
 namespace App\Entity;
 
 use App\Repository\ExceptionRepository;
-use DateTimeInterface;
+use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use stdClass;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
-/**
- * @ORM\Entity(repositoryClass=ExceptionRepository::class)
- */
+#[ORM\Entity(repositoryClass: ExceptionRepository::class)]
 class Exception {
 
     private const REQUEST = "Symfony\Component\HttpFoundation\Request";
     private const FLATTEN_EXCEPTIONS = "Symfony\Component\ErrorHandler\Exception\FlattenException[]";
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private ?int $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Instance", cascade={"persist"})
-     */
-    private Instance $instance;
+    #[ORM\ManyToOne(targetEntity: Instance::class, cascade: ["persist"])]
+    private ?Instance $instance = null;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private ?array $context;
+    #[ORM\Column(type: Types::JSON)]
+    private ?array $context = null;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private ?array $user;
+    #[ORM\Column(type: Types::JSON)]
+    private ?array $user = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private string $request;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $request = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $exceptions = null;
+
+
     private ?array $unserializedRequest = null;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private string $exceptions;
     private ?array $unserializedExceptions = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private DateTimeInterface $time;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?DateTime $time = null;
 
     public function getId(): ?int {
         return $this->id;
@@ -68,24 +48,27 @@ class Exception {
         return $this->instance;
     }
 
-    public function setInstance(Instance $instance): void {
+    public function setInstance(?Instance $instance): self {
         $this->instance = $instance;
+        return $this;
     }
 
     public function getContext(): ?array {
         return $this->context;
     }
 
-    public function setContext(?array $context): void {
+    public function setContext(?array $context): self {
         $this->context = $context;
+        return $this;
     }
 
     public function getUser(): ?array {
         return $this->user;
     }
 
-    public function setUser(?array $user): void {
+    public function setUser(?array $user): self {
         $this->user = $user;
+        return $this;
     }
 
     public function getRequest(): ?array {
@@ -134,11 +117,11 @@ class Exception {
         return $this;
     }
 
-    public function getTime(): ?DateTimeInterface {
+    public function getTime(): ?DateTime {
         return $this->time;
     }
 
-    public function setTime(DateTimeInterface $time): self {
+    public function setTime(?DateTime $time): self {
         $this->time = $time;
         return $this;
     }
