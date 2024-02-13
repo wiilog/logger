@@ -53,7 +53,7 @@ class ApiController extends AbstractController {
         $exception = new Exception();
         $exception->setInstance($instance);
         $exception->setContext($request->request->all("context"));
-        $exception->setUser($request->request->get("user"));
+        $exception->setUser($request->request->all("user"));
         $exception->setRequest($requestStr);
         $exception->setExceptions($exceptionsStr);
         $exception->setTime(DateTime::createFromFormat("d-m-Y H:i:s", $request->request->get("time")));
