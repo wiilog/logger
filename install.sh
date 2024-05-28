@@ -8,11 +8,7 @@ execute_query() {
 
 prepare_project() {
     echo ">>>>>> composer install"
-    composer install \
-        --no-dev \
-        --optimize-autoloader \
-        --classmap-authoritative \
-        --no-ansi
+    composer install
 
     echo ">>>>>> yarn install"
     yarn install
