@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/api")]
+#[Route("/api", name: "api_")]
 class ApiController extends AbstractController {
 
-    #[Route("/log", name: "api_log", methods: ["POST"])]
+    #[Route("/log", name: "log", methods: ["POST"])]
     public function log(EntityManagerInterface $entityManager,
                         Request                $request): JsonResponse {
         // Ignore requests from outside the cluster
