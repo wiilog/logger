@@ -8,7 +8,11 @@ execute_query() {
 
 prepare_project() {
     echo ">>>>>> composer install"
-    composer install
+    composer install \
+        --no-dev \
+        --optimize-autoloader \
+        --classmap-authoritative \
+        --no-ansi
 
     echo ">>>>>> yarn install"
     yarn install
@@ -36,5 +40,6 @@ cd /project
 
 prepare_project
 install_symfony
+build_yarn
 
 echo "Current date: $(date)"
