@@ -67,6 +67,15 @@ class ApiController extends AbstractController {
         ]);
     }
 
+    #[Route("/ping", name: 'ping', options: ["expose" => true], methods: ['GET'])]
+    public function ping(): JsonResponse {
+        $response = new JsonResponse(['success' => true]);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Methods', 'GET');
+        return $response;
+    }
+
     private function isJson(?string $string): bool {
         json_decode($string);
         return json_last_error() == JSON_ERROR_NONE;
