@@ -2,17 +2,10 @@
 
 namespace App\Repository;
 
-use App\Entity\Exception;
 use App\Entity\Instance;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
-/**
- * @method Exception|null find($id, $lockMode = null, $lockVersion = null)
- * @method Exception|null findOneBy(array $criteria, array $orderBy = null)
- * @method Exception[]    findAll()
- * @method Exception[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ExceptionRepository extends EntityRepository {
 
     public function queryOrdered(): Query {
@@ -27,6 +20,14 @@ class ExceptionRepository extends EntityRepository {
             ->orderBy("e.time", "DESC")
             ->setParameter("instance", $instance)
             ->getQuery();
+    }
+
+    public function iterateOlderThan(\DateTime $dateTime): iterable {
+        return $this->createQueryBuilder("exception")
+            ->andWhere("exception.time < :time")
+            ->setParameter("time", $dateTime)
+            ->getQuery()
+            ->toIterable();
     }
 
 }
