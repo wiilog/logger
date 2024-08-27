@@ -40,7 +40,7 @@ class ApiController extends AbstractController {
             $cache->delete("wiilogs.instances");
         }
 
-        $requestStr = $request->request->getString("request", '');
+        $requestStr = $request->request->getString("request");
         $exceptionsStr = $request->request->getString("exceptions");
 
         if(($requestStr !== '' && !$this->isJson($requestStr)) || !$this->isJson($exceptionsStr)) {
@@ -54,7 +54,7 @@ class ApiController extends AbstractController {
         $exception->setInstance($instance);
         $exception->setContext($request->request->all("context"));
         $exception->setUser($request->request->all("user"));
-        $exception->setRequest($requestStr ?: null);
+        $exception->setRequest($requestStr ?: 'Error from cron job');
         $exception->setExceptions($exceptionsStr);
         $exception->setTime(DateTime::createFromFormat("d-m-Y H:i:s", $request->request->get("time")));
 
