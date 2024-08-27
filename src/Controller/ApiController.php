@@ -43,7 +43,7 @@ class ApiController extends AbstractController {
         $requestStr = $request->request->getString("request");
         $exceptionsStr = $request->request->getString("exceptions");
 
-        if(!$this->isJson($requestStr) || !$this->isJson($exceptionsStr)) {
+        if(($requestStr !== '' && !$this->isJson($requestStr)) || !$this->isJson($exceptionsStr)) {
             return $this->json([
                 "success" => false,
                 "message" => "Payload is not valid JSON"
@@ -54,7 +54,7 @@ class ApiController extends AbstractController {
         $exception->setInstance($instance);
         $exception->setContext($request->request->all("context"));
         $exception->setUser($request->request->all("user"));
-        $exception->setRequest($requestStr);
+        $exception->setRequest($requestStr ?: 'Error from cron job');
         $exception->setExceptions($exceptionsStr);
         $exception->setTime(DateTime::createFromFormat("d-m-Y H:i:s", $request->request->get("time")));
 
